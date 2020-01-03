@@ -1,6 +1,6 @@
 # Render Client
 
-Query tool for generating rendered files/scripts for clusters, groups, and nodes
+File rendering engine for clusters, groups, and nodes
 
 ## Overview
 

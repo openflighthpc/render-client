@@ -35,7 +35,7 @@ module RenderClient
   class CLI
     extend Commander::Delegates
 
-    program :name, 'render'
+    program :name, 'engine'
     program :version, RenderClient::VERSION
     program :description, 'Render files for cluster, groups, and nodes'
     program :help_paging, false
@@ -53,11 +53,10 @@ module RenderClient
         hash.delete(:trace)
         begin
           begin
-            cmd = klass.new
             if hash.empty?
-              cmd.public_send(method, *args)
+              klass.public_send(method, *args)
             else
-              cmd.public_send(method, *args, **hash)
+              klass.public_send(method, *args, **hash)
             end
           rescue Interrupt
             raise RuntimeError, 'Received Interrupt!'
@@ -92,6 +91,80 @@ module RenderClient
       command.syntax = <<~SYNTAX.chomp
         #{program(:name)} #{command.name} #{args_str}
       SYNTAX
+    end
+
+    command 'list-templates' do |c|
+      cli_syntax(c)
+      c.summary = 'Return all the available templates'
+    end
+
+    command 'list-nodes' do |c|
+      cli_syntax(c)
+      c.summary = 'Return all the available nodes'
+    end
+
+    command 'list-groups' do |c|
+      cli_syntax(c)
+      c.summary = 'Return all the available groups'
+    end
+
+    command 'template' do |c|
+      cli_syntax(c)
+      c.summary = 'View and manage a template resource'
+      c.sub_command_group = true
+    end
+
+    command 'template show' do |c|
+      cli_syntax(c, 'NAME.TYPE')
+      c.summary = 'View the content of a template'
+    end
+
+    command 'template create' do |c|
+      cli_syntax(c, 'NAME.TYPE')
+      c.summary = 'Upload a new template'
+    end
+
+    command 'template update' do |c|
+      cli_syntax(c, 'NAME.TYPE PATH')
+      c.summary = 'Replace a template with a local file'
+    end
+
+    command 'template edit' do |c|
+      cli_syntax(c, 'NAME.TYPE')
+      c.summary = 'Edit a template through the system edittor'
+    end
+
+    command 'template delete' do |c|
+      cli_syntax(c, 'NAME.TYPE')
+      c.summary = 'Permanently destroy a template'
+    end
+
+    command 'download' do |c|
+      cli_syntax(c, 'NAME.TYPE...')
+      c.summary = 'Download the rendered files from the server'
+      c.description = <<~DESC
+        Render and downlaod files for the given templates within particular contexts.
+        Multiple templates can be rendered by repeating the NAME.TYPE argument. The
+        NAME and TYPE are the same as the template commands.
+
+        All downloads are contextually dependent and must specify one cluster/group/node
+        flags. Nothing will be downloaded without one of these flags as no files have
+        been selected.
+
+        By default all files are downloaded to subdirectories within the current working
+        directory. The subdirectory a file is placed within is given by its context.
+
+        (*) Multiple names can be passed to these option flags as a comma separated list.
+      DESC
+      c.option '-n --nodes NAMES',
+        'Render the templates in a nodes context (*)'
+      c.option '-g --groups NAMES',
+        'Render the templates in a groups context (*)'
+      c.option '--nodes-in GROUP_NAMES',
+        'Render the templates for all the nodes within a group (*)'
+      c.option '--cluster', 'Render the templates in the cluster context'
+      c.option '-o --output-dir DIRECTORY',
+        'Specify the directory to render the templates'
     end
   end
 end
