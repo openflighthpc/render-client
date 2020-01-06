@@ -97,6 +97,10 @@ module RenderClient
         end
         puts render_table(SHOW_TABLE, template)
       end
+
+      def delete
+        TemplateRecord.new(id: id).destroy
+      end
     end
   end
 end

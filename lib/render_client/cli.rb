@@ -144,6 +144,7 @@ module RenderClient
     command 'template delete' do |c|
       cli_syntax(c, 'NAME.TYPE')
       c.summary = 'Permanently destroy a template'
+      action(c, Commands::Template, method: :delete)
     end
 
     command 'download' do |c|
