@@ -143,28 +143,31 @@ module RenderClient
       cli_syntax(c, 'NAME.TYPE...')
       c.summary = 'Download the rendered files from the server'
       c.description = <<~DESC
-        Render and downlaod files for the given templates within particular contexts.
-        Multiple templates can be rendered by repeating the NAME.TYPE argument. The
+        Download the rendered files for the given templates and contexts.
+        Multiple templates can be selected by repeating the NAME.TYPE argument. The
         NAME and TYPE are the same as the template commands.
 
-        All downloads are contextually dependent and must specify one cluster/group/node
-        flags. Nothing will be downloaded without one of these flags as no files have
-        been selected.
+        All downloads are contextually dependent and must specify one of the
+        cluster/group/node flags. Nothing will be downloaded without one of these flags
+        as the context is required.
 
         By default all files are downloaded to subdirectories within the current working
-        directory. The subdirectory a file is placed within is given by its context.
+        directory. The name of the subdirectories depends on the context:
+          - cluster:  ./cluster
+          - groups:   ./groups/<group-name>
+          - nodes:    ./nodes/<node-name>
 
-        (*) Multiple names can be passed to these option flags as a comma separated list.
+        (*) Multiple names can be passed to these context flags as a comma separated list.
       DESC
       c.option '-n --nodes NAMES',
-        'Render the templates in a nodes context (*)'
+        'Render the templates in the nodes context (*)'
       c.option '-g --groups NAMES',
-        'Render the templates in a groups context (*)'
-      c.option '--nodes-in GROUP_NAMES',
-        'Render the templates for all the nodes within a group (*)'
-      c.option '--cluster', 'Render the templates in the cluster context'
-      c.option '-o --output-dir DIRECTORY',
-        'Specify the directory to render the templates'
+        'Render the templates in the groups context (*)'
+      c.option '-N', '--nodes-in GROUP_NAMES',
+        'Render the templates for all the node contexts within the given groups (*)'
+      c.option '-c', '--cluster', 'Render the templates in the cluster context'
+      c.option '-o --output DIRECTORY',
+        'Specify the directory to save the templates in'
     end
   end
 end
