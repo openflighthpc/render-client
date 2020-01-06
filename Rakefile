@@ -27,7 +27,7 @@
 # https://github.com/openflighthpc/render-client
 #===============================================================================
 
-task :setup do
+task :require do
   $: << File.expand_path('lib', __dir__)
   ENV['BUNDLE_GEMFILE'] ||= File.join(__dir__, 'Gemfile')
 
@@ -41,17 +41,16 @@ task :setup do
   require 'render_client/config'
 
   if RenderClient::Config::Cache.debug?
-    # Redirect stderr to suppress IRB redefinition
-    # old_stderr = $stderr
-    # $stderr = StringIO.new
     require 'pry'
     require 'pry-byebug'
-    # $stderr = old_stderr
   end
+
+  require 'render_client/records'
+  require 'render_client/commands/list'
+  require 'render_client/cli'
 end
 
-task console: :setup do
-  # require 'nodeattr_client/cli'
+task console: :require do
   binding.pry
 end
 

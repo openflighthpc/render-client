@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 #==============================================================================
@@ -28,9 +27,30 @@
 # https://github.com/openflighthpc/render-client
 #===============================================================================
 
-require 'rake'
-load File.expand_path('../Rakefile', __dir__)
+require 'json_api_client'
 
-Rake::Task[:require].invoke
+module RenderClient
+  class BaseRecord < JsonApiClient::Resource
+    def self.table_name
+      @table_name ||= self.to_s.demodulize.chomp('Record').downcase.pluralize
+    end
 
-RenderClient::CLI.run! if $PROGRAM_NAME == __FILE__
+    self.site = Config::Cache.base_url
+    self.connection.faraday.authorization :Bearer, Config::Cache.jwt_token
+  end
+
+  class NodeRecord < BaseRecord
+    property :name
+  end
+
+  class GroupRecord < BaseRecord
+    property :name
+  end
+
+  class TemplateRecord < BaseRecord
+    property :name
+    property :file_type
+    property :payload
+  end
+end
+

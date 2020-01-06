@@ -96,16 +96,19 @@ module RenderClient
     command 'list-templates' do |c|
       cli_syntax(c)
       c.summary = 'Return all the available templates'
+      action(c, Commands::List, method: :templates)
     end
 
     command 'list-nodes' do |c|
       cli_syntax(c)
       c.summary = 'Return all the available nodes'
+      action(c, Commands::List, method: :nodes)
     end
 
     command 'list-groups' do |c|
       cli_syntax(c)
       c.summary = 'Return all the available groups'
+      action(c, Commands::List, method: :groups)
     end
 
     command 'template' do |c|

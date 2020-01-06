@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 #==============================================================================
@@ -28,9 +27,20 @@
 # https://github.com/openflighthpc/render-client
 #===============================================================================
 
-require 'rake'
-load File.expand_path('../Rakefile', __dir__)
+module RenderClient
+  module Commands
+    class List
+      def self.nodes
+        puts NodeRecord.all.map(&:name)
+      end
 
-Rake::Task[:require].invoke
+      def self.groups
+        puts GroupRecord.all.map(&:name)
+      end
 
-RenderClient::CLI.run! if $PROGRAM_NAME == __FILE__
+      def self.templates
+        puts TemplateRecord.all.map(&:id)
+      end
+    end
+  end
+end
