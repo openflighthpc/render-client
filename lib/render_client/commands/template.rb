@@ -64,6 +64,16 @@ module RenderClient
         template = TemplateRecord.find(id).first
         puts render_table(SHOW_TABLE, template)
       end
+
+      def create(path)
+        abs_path = File.expand_path(path, Dir.pwd)
+        template = TemplateRecord.create(
+          name: name,
+          file_type: type,
+          payload: File.read(abs_path)
+        )
+        puts render_table(SHOW_TABLE, template)
+      end
     end
   end
 end

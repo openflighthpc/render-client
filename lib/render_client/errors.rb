@@ -27,33 +27,8 @@
 # https://github.com/openflighthpc/render-client
 #===============================================================================
 
-task :require do
-  $: << File.expand_path('lib', __dir__)
-  ENV['BUNDLE_GEMFILE'] ||= File.join(__dir__, 'Gemfile')
-
-  require 'rubygems'
-  require 'bundler/setup'
-
-  require 'active_support/core_ext/string'
-  require 'active_support/core_ext/module'
-  require 'active_support/core_ext/module/delegation'
-
-  require 'render_client/config'
-
-  if RenderClient::Config::Cache.debug?
-    require 'pry'
-    require 'pry-byebug'
-  end
-
-  require 'render_client/errors'
-  require 'render_client/records'
-  require 'render_client/concerns/has_table_renderer'
-  require 'render_client/commands/list'
-  require 'render_client/commands/template'
-  require 'render_client/cli'
+module RenderClient
+  class RenderClientError < StandardError; end
+  class ClientError < RenderClientError; end
+  class InternalServerError < RenderClientError; end
 end
-
-task console: :require do
-  binding.pry
-end
-

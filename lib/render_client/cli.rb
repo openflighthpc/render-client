@@ -124,8 +124,9 @@ module RenderClient
     end
 
     command 'template create' do |c|
-      cli_syntax(c, 'NAME.TYPE')
+      cli_syntax(c, 'NAME.TYPE FILE_PATH')
       c.summary = 'Upload a new template'
+      action(c, Commands::Template, method: :create)
     end
 
     command 'template update' do |c|
