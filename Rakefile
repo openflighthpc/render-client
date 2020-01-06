@@ -50,6 +50,7 @@ task :require do
   require 'render_client/concerns/has_table_renderer'
   require 'render_client/commands/list'
   require 'render_client/commands/template'
+  require 'render_client/commands/download'
   require 'render_client/cli'
 end
 

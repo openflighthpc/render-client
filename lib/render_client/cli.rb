@@ -175,15 +175,17 @@ module RenderClient
 
         (*) Multiple names can be passed to these context flags as a comma separated list.
       DESC
-      c.option '-n --nodes NAMES',
+      c.option '-n', '--nodes NAMES',
         'Render the templates in the nodes context (*)'
-      c.option '-g --groups NAMES',
+      c.option '-g', '--groups NAMES',
         'Render the templates in the groups context (*)'
       c.option '-N', '--nodes-in GROUP_NAMES',
         'Render the templates for all the node contexts within the given groups (*)'
       c.option '-c', '--cluster', 'Render the templates in the cluster context'
-      c.option '-o --output DIRECTORY',
+      c.option '-o', '--output DIRECTORY',
         'Specify the directory to save the templates in'
+      c.option '--force', 'Replace any existing file downloads'
+      action(c, Commands::Download)
     end
   end
 end

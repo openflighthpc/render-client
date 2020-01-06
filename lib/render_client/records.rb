@@ -31,12 +31,19 @@ require 'json_api_client'
 
 module RenderClient
   class BaseRecord < JsonApiClient::Resource
-    def self.table_name
+    def self.inherited(klass)
+      resolve_custom_type klass.resource_name, klass
+    end
+
+    def self.resource_name
       @table_name ||= self.to_s.demodulize.chomp('Record').downcase.pluralize
     end
 
     self.site = Config::Cache.base_url
     self.connection.faraday.authorization :Bearer, Config::Cache.jwt_token
+  end
+
+  class ClusterRecord < BaseRecord
   end
 
   class NodeRecord < BaseRecord
@@ -50,6 +57,10 @@ module RenderClient
   class TemplateRecord < BaseRecord
     property :name
     property :file_type
+    property :payload
+  end
+
+  class FileRecord < BaseRecord
     property :payload
   end
 end
