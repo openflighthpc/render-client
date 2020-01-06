@@ -124,8 +124,16 @@ module RenderClient
     end
 
     command 'template create' do |c|
-      cli_syntax(c, 'NAME.TYPE FILE_PATH')
+      cli_syntax(c, 'NAME.TYPE [FILE_PATH]')
       c.summary = 'Upload a new template'
+      c.description = <<~DESC.chomp
+        Create a new template entry from an existing file. The NAME and
+        TYPE must be alphanumeic but may contain `-` and `_`. A single
+        TYPE file extension must be given and delimited by a period.
+
+        The FILE_PATH maybe absolute or relative to the current working
+        directory. An empty file is uploaded if it is omitted.
+      DESC
       action(c, Commands::Template, method: :create)
     end
 
@@ -150,7 +158,7 @@ module RenderClient
     command 'download' do |c|
       cli_syntax(c, 'NAME.TYPE...')
       c.summary = 'Download the rendered files from the server'
-      c.description = <<~DESC
+      c.description = <<~DESC.chomp
         Download the rendered files for the given templates and contexts.
         Multiple templates can be selected by repeating the NAME.TYPE argument. The
         NAME and TYPE are the same as the template commands.

@@ -68,12 +68,11 @@ module RenderClient
         puts render_table(SHOW_TABLE, template)
       end
 
-      def create(path)
-        abs_path = File.expand_path(path, Dir.pwd)
+      def create(path = nil)
         template = TemplateRecord.create(
           name: name,
           file_type: type,
-          payload: File.read(abs_path)
+          payload: path.nil? ? '' : File.read(File.expand_path(path, Dir.pwd))
         )
         puts render_table(SHOW_TABLE, template)
       end
