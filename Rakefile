@@ -46,7 +46,9 @@ task :require do
   end
 
   require 'render_client/records'
+  require 'render_client/concerns/has_table_renderer'
   require 'render_client/commands/list'
+  require 'render_client/commands/template'
   require 'render_client/cli'
 end
 

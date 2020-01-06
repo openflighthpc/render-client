@@ -29,17 +29,40 @@
 
 module RenderClient
   module Commands
-    class List
-      def self.nodes
-        puts NodeRecord.all.map(&:name)
+    Template = Struct.new(:id) do
+      include Concerns::HasTableRenderer
+
+      SHOW_TABLE = [
+        ['ID',      ->(t) { t.id }],
+        ['Name',    ->(t) { t.name }],
+        ['Type',    ->(t) { t.type }],
+        ['Content', ->(t) { t.payload }]
+      ]
+
+      def self.method_missing(s, *a, &b)
+        if respond_to_missing?(s) == :instance
+          id = a.first
+          rest = a[1..-1]
+          new(id).send(s, *rest, &b)
+        else
+          super
+        end
       end
 
-      def self.groups
-        puts GroupRecord.all.map(&:name)
+      def self.respond_to_missing?(s)
+        self.instance_methods.include?(s) ? :instance : super
       end
 
-      def self.templates
-        puts TemplateRecord.all.map(&:id)
+      attr_reader :name, :type
+
+      def initialize(*a)
+        super
+        @name, @type = id.split('.', 2)
+      end
+
+      def show
+        template = TemplateRecord.find(id).first
+        puts render_table(SHOW_TABLE, template)
       end
     end
   end

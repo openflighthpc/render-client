@@ -27,19 +27,15 @@
 # https://github.com/openflighthpc/render-client
 #===============================================================================
 
+require 'tty-table'
+
 module RenderClient
-  module Commands
-    class List
-      def self.nodes
-        puts NodeRecord.all.map(&:name)
-      end
-
-      def self.groups
-        puts GroupRecord.all.map(&:name)
-      end
-
-      def self.templates
-        puts TemplateRecord.all.map(&:id)
+  module Concerns
+    module HasTableRenderer
+      def render_table(table_spec, entity)
+        data = table_spec.map { |t| [t[0], t[1].call(entity)] }
+        table = TTY::Table.new data
+        table.render multiline: true
       end
     end
   end

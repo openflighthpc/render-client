@@ -120,6 +120,7 @@ module RenderClient
     command 'template show' do |c|
       cli_syntax(c, 'NAME.TYPE')
       c.summary = 'View the content of a template'
+      action(c, Commands::Template, method: :show)
     end
 
     command 'template create' do |c|
