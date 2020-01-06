@@ -27,6 +27,9 @@
 # https://github.com/openflighthpc/render-client
 #===============================================================================
 
+require 'tempfile'
+require 'tty-editor'
+
 module RenderClient
   module Commands
     Template = Struct.new(:id) do
@@ -80,6 +83,18 @@ module RenderClient
         template = TemplateRecord.new(id: id)
         template.mark_as_persisted!
         template.update(payload: File.read(abs_path))
+        puts render_table(SHOW_TABLE, template)
+      end
+
+      def edit
+        template = TemplateRecord.find(id).first.tap do |t|
+          Tempfile.open(t.id) do |io|
+            io.write(t.payload)
+            io.rewind
+            TTY::Editor.open(io.path)
+            t.update(payload: io.read)
+          end
+        end
         puts render_table(SHOW_TABLE, template)
       end
     end

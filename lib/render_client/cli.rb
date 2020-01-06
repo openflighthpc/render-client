@@ -138,6 +138,7 @@ module RenderClient
     command 'template edit' do |c|
       cli_syntax(c, 'NAME.TYPE')
       c.summary = 'Edit a template through the system edittor'
+      action(c, Commands::Template, method: :edit)
     end
 
     command 'template delete' do |c|
