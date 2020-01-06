@@ -132,6 +132,7 @@ module RenderClient
     command 'template update' do |c|
       cli_syntax(c, 'NAME.TYPE PATH')
       c.summary = 'Replace a template with a local file'
+      action(c, Commands::Template, method: :update)
     end
 
     command 'template edit' do |c|

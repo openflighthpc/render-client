@@ -74,6 +74,14 @@ module RenderClient
         )
         puts render_table(SHOW_TABLE, template)
       end
+
+      def update(path)
+        abs_path = File.expand_path(path, Dir.pwd)
+        template = TemplateRecord.new(id: id)
+        template.mark_as_persisted!
+        template.update(payload: File.read(abs_path))
+        puts render_table(SHOW_TABLE, template)
+      end
     end
   end
 end
