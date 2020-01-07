@@ -30,7 +30,7 @@
 require 'commander'
 
 module RenderClient
-  VERSION = '0.0.1'
+  VERSION = '0.1.0'
 
   class CLI
     extend Commander::Delegates
