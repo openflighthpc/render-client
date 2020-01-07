@@ -32,11 +32,11 @@ require 'hashie'
 module RenderClient
   module Commands
     class Download < Hashie::Dash
-      def self.run!(*args, **kwargs)
-        new(ids: args, **kwargs).run!
+      def self.run!(ids, **kwargs)
+        new(ids: ids, **kwargs).run!
       end
 
-      property :ids, default: []
+      property :ids, default: ''
 
       # NOTE: These properties map to the command line flags
       property :nodes
@@ -77,7 +77,7 @@ module RenderClient
           h[:'node.group-ids'] = nodes_in if nodes_in
           h[:'group.ids'] = groups        if groups
           h[:cluster] = 'true'            if cluster
-          h[:ids] = ids.join(',')         unless ids.empty?
+          h[:ids] = ids                   unless ids.empty?
         end
       end
     end

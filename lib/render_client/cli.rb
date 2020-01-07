@@ -156,12 +156,13 @@ module RenderClient
     end
 
     command 'download' do |c|
-      cli_syntax(c, 'NAME.TYPE...')
+      cli_syntax(c, 'NAME.TYPE[,NAME.TYPE,...]')
       c.summary = 'Download the rendered files from the server'
       c.description = <<~DESC.chomp
         Download the rendered files for the given templates and contexts.
         Multiple templates can be selected by repeating the NAME.TYPE argument. The
-        NAME and TYPE are the same as the template commands.
+        NAME and TYPE are the same as the template commands. Multiple templates can
+        be rendered by giving the arguments as a comma separated list.
 
         All downloads are contextually dependent and must specify one of the
         cluster/group/node flags. Nothing will be downloaded without one of these flags
