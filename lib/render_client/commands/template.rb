@@ -72,6 +72,10 @@ module RenderClient
           name: name,
           payload: path.nil? ? '' : File.read(File.expand_path(path, Dir.pwd))
         )
+        raise <<~ERROR if template.errors
+          Failed to create the template due to the following validation errors:
+          #{template.errors.map { |k, s| " * #{k}: #{s}" }.join("\n")}
+        ERROR
         puts render_table(SHOW_TABLE, template)
       end
 
