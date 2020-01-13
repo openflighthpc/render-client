@@ -118,13 +118,13 @@ module RenderClient
     end
 
     command 'template show' do |c|
-      cli_syntax(c, 'NAME.TYPE')
+      cli_syntax(c, 'NAME')
       c.summary = 'View the content of a template'
       action(c, Commands::Template, method: :show)
     end
 
     command 'template create' do |c|
-      cli_syntax(c, 'NAME.TYPE [FILE_PATH]')
+      cli_syntax(c, 'NAME [FILE_PATH]')
       c.summary = 'Upload a new template'
       c.description = <<~DESC.chomp
         Create a new template entry from an existing file. The NAME and
@@ -138,29 +138,29 @@ module RenderClient
     end
 
     command 'template update' do |c|
-      cli_syntax(c, 'NAME.TYPE PATH')
+      cli_syntax(c, 'NAME PATH')
       c.summary = 'Replace a template with a local file'
       action(c, Commands::Template, method: :update)
     end
 
     command 'template edit' do |c|
-      cli_syntax(c, 'NAME.TYPE')
+      cli_syntax(c, 'NAME')
       c.summary = 'Edit a template through the system edittor'
       action(c, Commands::Template, method: :edit)
     end
 
     command 'template delete' do |c|
-      cli_syntax(c, 'NAME.TYPE')
+      cli_syntax(c, 'NAME')
       c.summary = 'Permanently destroy a template'
       action(c, Commands::Template, method: :delete)
     end
 
     command 'download' do |c|
-      cli_syntax(c, 'NAME.TYPE[,NAME.TYPE,...]')
+      cli_syntax(c, 'NAME[,NAME,...]')
       c.summary = 'Download the rendered files from the server'
       c.description = <<~DESC.chomp
         Download the rendered files for the given templates and contexts.
-        Multiple templates can be selected by repeating the NAME.TYPE argument. The
+        Multiple templates can be selected by repeating the NAME argument. The
         NAME and TYPE are the same as the template commands. Multiple templates can
         be rendered by giving the arguments as a comma separated list.
 
