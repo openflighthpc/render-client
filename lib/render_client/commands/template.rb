@@ -32,11 +32,10 @@ require 'tty-editor'
 
 module RenderClient
   module Commands
-    Template = Struct.new(:id) do
+    Template = Struct.new(:name) do
       include Concerns::HasTableRenderer
 
       SHOW_TABLE = [
-        ['ID',      ->(t) { t.id }],
         ['Name',    ->(t) { t.name }],
         ['Content', ->(t) { t.payload }]
       ]
@@ -55,11 +54,8 @@ module RenderClient
         self.instance_methods.include?(s) ? :instance : super
       end
 
-      attr_reader :name
-
-      def initialize(*a)
-        super
-        @name = id.split('.', 2)
+      def id
+        name
       end
 
       def show
@@ -72,7 +68,7 @@ module RenderClient
           name: name,
           payload: path.nil? ? '' : File.read(File.expand_path(path, Dir.pwd))
         )
-        raise <<~ERROR if template.errors
+        raise <<~ERROR if template.errors.any?
           Failed to create the template due to the following validation errors:
           #{template.errors.map { |k, s| " * #{k}: #{s}" }.join("\n")}
         ERROR
