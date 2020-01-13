@@ -55,6 +55,8 @@ task :require do
 end
 
 task console: :require do
+  require 'pry'
+  require 'pry-byebug'
   binding.pry
 end
 
