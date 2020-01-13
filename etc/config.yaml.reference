@@ -21,7 +21,7 @@ base_url:
 jwt_token:
 
 # =============================================================================
-# Debugging Mode
+# Debugging Mode [Development Purposes Only]
 # Enable the development tools for debugging purposes
 # =============================================================================
 debug:
