@@ -38,7 +38,6 @@ module RenderClient
       SHOW_TABLE = [
         ['ID',      ->(t) { t.id }],
         ['Name',    ->(t) { t.name }],
-        ['Type',    ->(t) { t.type }],
         ['Content', ->(t) { t.payload }]
       ]
 
@@ -56,11 +55,11 @@ module RenderClient
         self.instance_methods.include?(s) ? :instance : super
       end
 
-      attr_reader :name, :type
+      attr_reader :name
 
       def initialize(*a)
         super
-        @name, @type = id.split('.', 2)
+        @name = id.split('.', 2)
       end
 
       def show
@@ -71,7 +70,6 @@ module RenderClient
       def create(path = nil)
         template = TemplateRecord.create(
           name: name,
-          file_type: type,
           payload: path.nil? ? '' : File.read(File.expand_path(path, Dir.pwd))
         )
         puts render_table(SHOW_TABLE, template)
