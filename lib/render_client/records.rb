@@ -56,7 +56,6 @@ module RenderClient
 
   class TemplateRecord < BaseRecord
     property :name
-    property :file_type
     property :payload
   end
 
