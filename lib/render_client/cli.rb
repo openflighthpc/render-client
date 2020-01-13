@@ -125,11 +125,12 @@ module RenderClient
 
     command 'template create' do |c|
       cli_syntax(c, 'NAME [FILE_PATH]')
-      c.summary = 'Upload a new template'
+      c.summary = 'Upload a new template with a defined name'
       c.description = <<~DESC.chomp
-        Create a new template entry from an existing file. The NAME and
-        TYPE must be alphanumeic but may contain `-` and `_`. A single
-        TYPE file extension must be given and delimited by a period.
+        Create a new template entry from an existing file. The NAME
+        must be alphanumeic but may contain: '.', '-', and '_'.
+        File extensions are not treated as part of the NAME and
+        can be ommitted.
 
         The FILE_PATH maybe absolute or relative to the current working
         directory. An empty file is uploaded if it is omitted.
@@ -156,32 +157,31 @@ module RenderClient
     end
 
     command 'download' do |c|
-      cli_syntax(c, 'NAME[,NAME,...]')
+      cli_syntax(c, 'NAME[,NAME,..]')
       c.summary = 'Download the rendered files from the server'
       c.description = <<~DESC.chomp
         Download the rendered files for the given templates and contexts.
         Multiple templates can be selected by repeating the NAME argument. The
-        NAME and TYPE are the same as the template commands. Multiple templates can
-        be rendered by giving the arguments as a comma separated list.
+        NAME argument should match a template (see: 'template create --help').
+        Multiple templates can be rendered by repeating the NAME argument as a
+        comma separated list.
 
         All downloads are contextually dependent and must specify one of the
-        cluster/group/node flags. Nothing will be downloaded without one of these flags
-        as the context is required.
+        cluster/group/node flags. Nothing will be downloaded without one of these
+        flags as the context is required.
 
-        By default all files are downloaded to subdirectories within the current working
-        directory. The name of the subdirectories depends on the context:
+        By default all files are downloaded to subdirectories within the current
+        working directory. The name of the subdirectories depends on the context:
           - cluster:  ./cluster
           - groups:   ./groups/<group-name>
           - nodes:    ./nodes/<node-name>
-
-        (*) Multiple names can be passed to these context flags as a comma separated list.
       DESC
-      c.option '-n', '--nodes NAMES',
-        'Render the templates in the nodes context (*)'
-      c.option '-g', '--groups NAMES',
-        'Render the templates in the groups context (*)'
-      c.option '-N', '--nodes-in GROUP_NAMES',
-        'Render the templates for all the node contexts within the given groups (*)'
+      c.option '-n', '--nodes NODE_NAME[,NODE_NAME,..]',
+        'Render the templates in the nodes context'
+      c.option '-g', '--groups NODE_NAME[,NODE_NAME,..]',
+        'Render the templates in the groups context'
+      c.option '-N', '--nodes-in GROUP_NAME,[GROUP_NAME,..]',
+        'Render the templates for all the node contexts within the given groups'
       c.option '-c', '--cluster', 'Render the templates in the cluster context'
       c.option '-o', '--output DIRECTORY',
         'Specify the directory to save the templates in'
